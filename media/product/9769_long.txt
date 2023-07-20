@@ -1,0 +1,13 @@
+Display: 6.5 inches, 102.0 cm2 (~83.4% screen-to-body ratio)
+Protection: Corning Gorilla Glass 3
+Processor: MediaTek Helio G88 (12nm)
+Rear Camera: 50 MP, f/1.8, (wide) + 8 MP, f/2.2, 120˚ (ultrawide) + 2 MP, f/2.4, (macro) + 2 MP, f/2.4, (depth)
+Selfie Camera: 8 MP, f/2.0, (wide), 1/4.0”, 1.12µm
+Fingerprint (side-mounted), accelerometer, proximity, compass
+Li-Po 6000 mAh, non-removable
+Weight: 181 g (6.38 oz)
+Video: 1080p @ 30fps
+90Hz Adaptive Refresh Rate
+HyperEngine Game Technology 2.0
+18W Fast Charging (Upto 9W Reverse Charging)
+Dual SIM (Nano-SIM, dual stand-by)
