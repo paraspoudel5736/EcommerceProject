@@ -347,19 +347,7 @@
 
 
 
-/*---------------------------------------------------
-    19. Payment credit card
----------------------------------------------------*/
 
-    function paymentCreditCard(){
-        var trigger = $('.paymentinfo-credit-trigger'),
-        container = $('.paymentinfo-credit-content');
-        trigger.on('click', function(e){
-        e.preventDefault();
-        container.slideToggle();
-    });
-    };
-    paymentCreditCard();
 
 
 /*-----------------------------------------------
