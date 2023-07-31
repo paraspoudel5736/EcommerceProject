@@ -50,7 +50,7 @@ $res=mysqli_query(mysqli_connect("localhost","root","","ecommerce"),$sql);
                                          <td><?php echo $row['name']?></td>
                                          <td><?php echo $row['email']?></td>
                                          <td><?php echo $row['mobile']?></td>
-                                        <td><?php echo $row['added_on']?></td>
+                                        <td><?php echo $row['email_verified_at']?></td>
                                          <td>
                                              <?php
                                              echo "<span class='badge badge-delete'><a href='?type=delete&id=".$row['id']."'>Delete</a></span>"; 

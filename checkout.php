@@ -12,12 +12,15 @@ if(!isset($_SESSION['cart']) || count($_SESSION['cart'])==0){
 //for cart total
 $cart_total=0;
 
+
+
 //form method post submit in database
 if(isset($_POST['submit'])){
     $address=get_safe_value($con,$_POST['address']);
     $city=get_safe_value($con,$_POST['city']);
     $pincode=get_safe_value($con,$_POST['pincode']);
     $payment_type=get_safe_value($con,$_POST['payment_type']);
+    echo $payment_type;
  
     $user_id=$_SESSION['USER_ID'];
 
@@ -64,19 +67,32 @@ foreach($_SESSION['cart'] as $key=>$val){
 		if(!empty($_POST)) {
 		  foreach($_POST as $key => $value) {    
 			$posted[$key] = $value; 
+            $order_status = "0";        
+    //    header("location:$URL");            
   }}
 }
-  ?>
-   <script>
-        window.location.href='thank_you.php';
-    </script>
-    <?php
 
-}
+//   if($payment_type == 'ESEWA'){
+    ?>
+     <!-- <script>
+    // window.location.href='#';   
+    window.location.href='https://uat.esewa.com.np/epay/main';
+    
+     </script> -->
+   <!-- <?php } else {
+  ?> -->
+    <script>
+         window.location.href='thank_you.php';
+    </script>
+    <?php }
+
+
+   
 
 
 
 ?>
+
 
         <!-- Start Bradcaump area -->
         <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
@@ -114,7 +130,7 @@ foreach($_SESSION['cart'] as $key=>$val){
                                         <div class="accordion__title">
                                         Checkout Method
                                     </div>
-                                    <div class="accordion__body">
+                                    <!-- <div class="accordion__body">
                                         <div class="accordion__body__form">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -179,14 +195,14 @@ foreach($_SESSION['cart'] as $key=>$val){
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <?php } ?>
                                     <div class="<?php echo $accordion_class?>">
                                         Address Information
                                     </div>
                                     <div class="accordion__body">
                                         <div class="bilinfo">
-                                            <form method="post">
+                                            <form method="post" action="#">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         
@@ -220,12 +236,14 @@ foreach($_SESSION['cart'] as $key=>$val){
                                         <div class="paymentinfo">
                                             <h3>Delivery Charge- Rs.100<h3> <br>
                                             <div class="single-method">
-                                             <input type="radio" name="payment_type"value="COD"required/> Cash On Delivery
 
-                                            
+                                             <input type="radio" name="payment_type" value="COD"required/> Cash On Delivery
+
+                                             <br>
+                                            <input type="radio" name="payment_type" value="ESEWA"required/> ESEWA
                                             </div>
                                              <br>
-                                            <input type="submit" name="submit"/>
+                                            <input type="submit" name="submit" value="Save Data"/>
                                                <br>
                                           
 
@@ -257,20 +275,21 @@ foreach($_SESSION['cart'] as $key=>$val){
                             $overall_charge=$cart_total+$delivery;
 
 							?> 
-                                    <div class="accordion__body">
-                                         <form class="card-body" action="https://uat.esewa.com.np/epay/main" method="post">
+                                    <div class="accordion__body esewa-test__class hidden">
+                                         <form class="card-body" action="https://uat.esewa.com.np/epay/main" method="POST">
               <input value="<?php echo $overall_charge?>" name="tAmt" type="hidden">
               <input value="<?php echo $overall_charge?>" name="amt" type="hidden">
               <input value="0" name="txAmt" type="hidden">
               <input value="0" name="psc" type="hidden">
               <input value="0" name="pdc" type="hidden">
-              <input value="125500" name="pid" type="hidden">
+              <input value="<?php echo $pid?>" name="pid" type="hidden">
               <input value="NP-ES-COLLEGE-TEST" name="scd" type="hidden">
               <input value="http://localhost/project/ecommerce/sucess.php?q=su" type="hidden" name="su">
               <input value="http://localhost/project/ecommerce/cart.php?q=fu" type="hidden" name="fu">
               <br>
             <br><input type="radio" name="payment_type"value="esewa"required/>ESEWA
-              <input class="btn btn-success btn-lg" name="submit" value="Pay with e-Sewa" type="submit" >
+            <input type="image" src="image/esewa.png">
+              <!-- <input class="btn btn-success btn-lg" name="submit" value="Pay with e-Sewa" type="submit" > -->
               <div class="single-method">
                                                
                                                </div>

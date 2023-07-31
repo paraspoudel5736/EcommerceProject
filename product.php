@@ -157,11 +157,16 @@ if(isset($_GET['id'])){
         <div class="container">
             <div class="row">
                 <div class="row">
-                    <hr />
-                    <div class="mt-5">
-                        Related Products:
+                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+    <div class="mt-5" style="
+    text-align: center;
+    text: 25px;
+    font-size: 30px;
+    font-weight: bold;">
+                        Related Products
                     </div>
                 </div>
+                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
                     <?php
                  
                     foreach($get_related_product as $list){

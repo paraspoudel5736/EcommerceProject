@@ -39,12 +39,12 @@ $totalProduct=$obj->totalProduct();
                 <div class="container">
                     <div class="row">
                         <div class="menumenu__container clearfix">
-                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-5"> 
+                            <div class="col-lg-2 col-md-1 col-sm-1 col-xs-1"> 
                                 <div class="logo">
                                      <a href="<?=SITE_PATH?>"><img src="images/logo/4.png" alt="logo images"></a>
                                 </div>
                             </div>
-                            <div class="col-md-7 col-lg-7 col-sm-5 col-xs-3">
+                            <div class="col-md-7 col-lg-7 col-sm-5 col-xs-2">
                                 <nav class="main__menu__nav hidden-xs hidden-sm">
                                     <ul class="main__menu">
                                         <li class="drop"><a href="<?=SITE_PATH?>">Home</a></li>
