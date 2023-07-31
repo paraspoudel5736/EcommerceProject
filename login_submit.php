@@ -13,11 +13,15 @@ $check_user=mysqli_num_rows($res);
     $_SESSION['USER_LOGIN']='yes';
     $_SESSION['USER_ID']=$row['id'];
     $_SESSION['USER_NAME']=$row['name'];
+    
      echo "valid";
- }else{
+       
+      }else{
      
      echo "wrong";
  }
+ 
+ 
 
 
 ?>
