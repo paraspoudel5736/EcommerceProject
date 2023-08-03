@@ -1,9 +1,3 @@
-<?php
-require('top.php');
-// include('checkout.php');
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,5 +14,3 @@ require('top.php');
 
 </body>
 </html>
-
-<?php include "footer.php"?>

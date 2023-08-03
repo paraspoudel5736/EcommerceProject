@@ -68,32 +68,18 @@ foreach($_SESSION['cart'] as $key=>$val){
 		  foreach($_POST as $key => $value) {    
 			$posted[$key] = $value; 
             $order_status = "0";        
-    //    header("location:$URL");            
+            
   }}
 }
-
-//   if($payment_type == 'ESEWA'){
-    ?>
-     <!-- <script>
-    // window.location.href='#';   
-    window.location.href='https://uat.esewa.com.np/epay/main';
-    
-     </script> -->
-   <!-- <?php } else {
-  ?> -->
-    <script>
-         window.location.href='thank_you.php';
-    </script>
-    <?php }
-
-
-   
-
-
-
+  
 ?>
+<script>
+     window.location.href='thank_you.php';
+ </script>
+ <?php
 
-
+}
+?>
         <!-- Start Bradcaump area -->
         <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
             <div class="ht__bradcaump__wrap">
@@ -202,7 +188,7 @@ foreach($_SESSION['cart'] as $key=>$val){
                                     </div>
                                     <div class="accordion__body">
                                         <div class="bilinfo">
-                                            <form method="post" action="#">
+                                            <form method="post">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         
@@ -240,12 +226,13 @@ foreach($_SESSION['cart'] as $key=>$val){
                                              <input type="radio" name="payment_type" value="COD"required/> Cash On Delivery
 
                                              <br>
-                                            <input type="radio" name="payment_type" value="ESEWA"required/> ESEWA
+                                            <!-- <input type="radio" name="payment_type" value="ESEWA"required/> ESEWA -->
                                             </div>
                                              <br>
-                                            <input type="submit" name="submit" value="Save Data"/>
+                                             <div class="buttons-cart checkout--btn">
+                                            <input type="submit" name="submit" value="submit"style="background:hsl(19deg 90% 49%);,color:#f5f5f5;"/>
                                                <br>
-                                          
+                                    </div>
 
                  
                                                
@@ -275,7 +262,7 @@ foreach($_SESSION['cart'] as $key=>$val){
                             $overall_charge=$cart_total+$delivery;
 
 							?> 
-                                    <div class="accordion__body esewa-test__class hidden">
+                                    <div class="accordion__body ">
                                          <form class="card-body" action="https://uat.esewa.com.np/epay/main" method="POST">
               <input value="<?php echo $overall_charge?>" name="tAmt" type="hidden">
               <input value="<?php echo $overall_charge?>" name="amt" type="hidden">
@@ -284,12 +271,12 @@ foreach($_SESSION['cart'] as $key=>$val){
               <input value="0" name="pdc" type="hidden">
               <input value="<?php echo $pid?>" name="pid" type="hidden">
               <input value="NP-ES-COLLEGE-TEST" name="scd" type="hidden">
-              <input value="http://localhost/project/ecommerce/sucess.php?q=su" type="hidden" name="su">
-              <input value="http://localhost/project/ecommerce/cart.php?q=fu" type="hidden" name="fu">
+              <input value="http://localhost/project/ecommerce/esewa_payment_success.php?q=su" type="hidden" name="su">
+              <input value="http://localhost/project/ecommerce/esewa_payment_failed.php?q=fu" type="hidden" name="fu">
               <br>
             <br><input type="radio" name="payment_type"value="esewa"required/>ESEWA
-            <input type="image" src="image/esewa.png">
-              <!-- <input class="btn btn-success btn-lg" name="submit" value="Pay with e-Sewa" type="submit" > -->
+            <!-- <input type="image" src="image/esewa.png"> -->
+              <input class="btn btn-success btn-lg" name="submit" value="Pay with e-Sewa" type="submit" >
               <div class="single-method">
                                                
                                                </div>

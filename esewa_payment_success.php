@@ -5,8 +5,8 @@ if( isset($_REQUEST['oid']) &&
 	isset( $_REQUEST['refId'])
 	)
 {
-	$sql = "SELECT * FROM order WHERE id = '".$_REQUEST['oid']."'"	;
-	$result = mysqli_query( $conn, $sql);
+	$sql = "SELECT * FROM order WHERE invoice_no = '".$_REQUEST['oid']."'"	;
+	$result = mysqli_query( $con, $sql);
 	if(  $result )
 	{
 
@@ -17,9 +17,9 @@ if( isset($_REQUEST['oid']) &&
 			$url = "https://uat.esewa.com.np/epay/transrec";
 		
 			$data =[
-			'amt'=> $order['total'],
+			'amt'=> $order['total_price'],
 			'rid'=>  $_REQUEST['refId'],
-			'pid'=>  $order['id'],
+			'pid'=>  $order['invoice_no'],
 			'scd'=> 'epay_payment'
 			];
 
@@ -33,7 +33,7 @@ if( isset($_REQUEST['oid']) &&
 			if ( trim($response_code)  == 'Success')
 			{
 				$sql = "UPDATE order SET payment_status=5 WHERE id='".$order['id']."'";
-				mysqli_query($conn, $sql);
+				mysqli_query($con, $sql);
 				//echo 'Thank you for purchasing with us. Your payment has been successfully.';
 				header('Location: success.php');
 			}
