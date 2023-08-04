@@ -1,5 +1,6 @@
 <?php 
 require('top.php');
+$metaTagVar ="";
 if(isset($_GET['id'])){
 	$product_id=mysqli_real_escape_string($con,$_GET['id']);
 	if($product_id>0){
@@ -20,7 +21,9 @@ if(isset($_GET['id'])){
 	<?php
 }
 ?>
-
+<?php
+    $metaTagVar = $get_product['0']['meta_tag'];
+?>
  <!-- Start Bradcaump area -->
         <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
             <div class="ht__bradcaump__wrap">
@@ -29,7 +32,7 @@ if(isset($_GET['id'])){
                         <div class="col-xs-12">
                             <div class="bradcaump__inner">
                                 <nav class="bradcaump-inner">
-                                  <a class="breadcrumb-item" href="index.php">Home</a>
+                                  <a class="breadcrumb-item" href="index.php">Home<?="hh".$metaTagVar?></a>
                                   <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
                                   <a class="breadcrumb-item" href="categories.php?id=<?php echo $get_product['0']['categories_id']?>"><?php echo $get_product['0']['categories']?></a>
                                   <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
@@ -154,43 +157,97 @@ if(isset($_GET['id'])){
             </div>
         </section>
         <!-- End Product Description -->
-        <div class="container">
+        <!-- content based recomended algorithm -->
+        <div class="container"> 
             <div class="row">
                 <div class="row">
                 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-    <div class="mt-5" style="
-    text-align: center;
-    text: 25px;
-    font-size: 30px;
-    font-weight: bold;">
+                    <div class="mt-5" style="
+                    text-align: center;
+                    text: 25px;
+                    font-size: 30px;
+                    font-weight: bold;">
                         Related Products
                     </div>
                 </div>
                 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-                    <?php
-                 
-                    foreach($get_related_product as $list){
-                    ?>
-                    <!-- Start Single Category -->
-                    <div class="col-md-4 col-lg-3 col-sm-4 col-xs-12">
+        <?php
+        $preferredTag = $metaTagVar;
+
+        // Fetch videos that match the user's preferred tag
+        $sql = "SELECT * FROM product WHERE  meta_tag = '$preferredTag'";
+        $result = $con->query($sql);
+        // Array to store recommended videos
+        $recommendedVideos = array();
+
+        // Check if there are any videos that match the preferred tag
+        if ($result->num_rows > 0) {
+            // Loop through each video and calculate similarity scores
+            while ($row = $result->fetch_assoc()) {
+                $productId = $row["id"];
+                $productTitle = $row["name"];
+                $productDesc = $row["description"];
+                $prodTag = $row["meta_tag"];
+                $productImg = $row["image"];
+                $prodPrice = $row["price"];
+
+                // Calculate similarity score based on video attributes (you can define your own similarity metric)
+                $similarityScore = calculateSimilarity($productTitle, $productDesc, $preferredTag);
+
+                // Store video details along with similarity score in the recommendedVideos array
+                $recommendedVideos[] = array(
+                    "productId" => $productId,
+                    "prodTitle" => $productTitle,
+                    "prodDesc" => $productDesc,
+                    "tag" => $prodTag,
+                    "productImg" => $productImg,
+                    "similarityScore" => $similarityScore,
+                    "prodPrice" => $prodPrice
+                );
+            }
+
+            // Sort recommended videos based on similarity score in descending order
+            usort($recommendedVideos, function ($a, $b) {
+                return $b["similarityScore"] <=> $a["similarityScore"];
+            });
+
+            // Display the recommended videos
+            foreach ($recommendedVideos as $prod) {
+                ?>
+                <div class="col-md-4 col-lg-3 col-sm-4 col-xs-12">
                         <div class="category">
                             <div class="ht__cat__thumb">
-                                <a href="product.php?id=<?php echo $list['id']?>">
-                                <img src="media/product/<?php echo $list['image']?>" alt="full-image"/>
+                                <a href="product.php?id=<?php echo $prod['productId']?>">
+                                <img src="media/product/<?php echo $prod['productImg']?>" alt="full-image"/>
                                 </a>
                             </div>
                             
                             <div class="fr__product__inner">
-                                <h4><a href="product-details.html"><?php echo $list['name']?></a></h4>
+                                <h4><a href="product-details.html"><?php echo $prod['prodTitle']?></a></h4>
                                 <ul class="fr__pro__prize">
-                                    <li>Rs. <?php echo $list['price']?></li>
+                                    <li>Rs. <?php echo $prod['prodPrice']?></li>
                                 </ul>
+                                <li><?php echo $prod['tag']?></li>
                             </div>
                         </div>
                     </div>
-                    <?php } ?>
-            </div>
-        </div>
+                <?php
+            }
+        } else {
+            echo "No videos found matching your preferred tag.";
+        }
+        $con->close();
 
+        // Function to calculate similarity score (you can implement your own similarity metric)
+        function calculateSimilarity($productTitle, $productDesc, $preferredTag) {
+            // Implement your own similarity calculation based on video attributes and the user's preferred tag
+            // For example, you can use cosine similarity, Jaccard similarity, etc.
+            // For simplicity, we'll just return a random similarity score in this example.
+            return rand(1, 10);
+        }
+        ?>
+        </div>
+        </div>
+        <!-- content based recomended algorithm -->
 										
 <?php require('footer.php')?>        

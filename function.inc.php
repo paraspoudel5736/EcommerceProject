@@ -64,6 +64,7 @@ function  get_related_products($con, $pid) {
 	$relatedProductName="";
 	$relatedImage="";
 	$relatedPrice="";
+	$meta_tag="";
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $pid);
     $stmt->execute();
@@ -71,17 +72,18 @@ function  get_related_products($con, $pid) {
     $stmt->fetch();
     $stmt->close();
     
-    $query = "SELECT id, image, name, price FROM product WHERE MATCH (description) AGAINST (?) AND id != ? LIMIT 5";
+    $query = "SELECT id, image, name, price, meta_tag FROM product WHERE MATCH (description) AGAINST (?) AND id != ? LIMIT 5";
     $stmt = $con->prepare($query);
     $stmt->bind_param("si", $productDescription, $pid);
     $stmt->execute();
-    $stmt->bind_result($relatedProductId,$relatedImage, $relatedProductName,  $relatedPrice);
+    $stmt->bind_result($relatedProductId,$relatedImage, $relatedProductName,  $relatedPrice, $meta_tag);
     
     $relatedProducts = array();
     while ($stmt->fetch()) {
-        $relatedProducts[] = array('id' => $relatedProductId, 'image' => $relatedImage,'name' => $relatedProductName, 'price' => $relatedPrice );
+        $relatedProducts[] = array('id' => $relatedProductId, 'image' => $relatedImage,'name' => $relatedProductName, 'price' => $relatedPrice,'meta_tag' => $meta_tag);
     }
     $stmt->close();
+
     
     return $relatedProducts;
 }

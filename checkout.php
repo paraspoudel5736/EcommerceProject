@@ -263,24 +263,11 @@ foreach($_SESSION['cart'] as $key=>$val){
 
 							?> 
                                     <div class="accordion__body ">
-                                         <form class="card-body" action="https://uat.esewa.com.np/epay/main" method="POST">
-              <input value="<?php echo $overall_charge?>" name="tAmt" type="hidden">
-              <input value="<?php echo $overall_charge?>" name="amt" type="hidden">
-              <input value="0" name="txAmt" type="hidden">
-              <input value="0" name="psc" type="hidden">
-              <input value="0" name="pdc" type="hidden">
-              <input value="<?php echo $pid?>" name="pid" type="hidden">
-              <input value="NP-ES-COLLEGE-TEST" name="scd" type="hidden">
-              <input value="http://localhost/project/ecommerce/esewa_payment_success.php?q=su" type="hidden" name="su">
-              <input value="http://localhost/project/ecommerce/esewa_payment_failed.php?q=fu" type="hidden" name="fu">
-              <br>
-            <br><input type="radio" name="payment_type"value="esewa"required/>ESEWA
-            <!-- <input type="image" src="image/esewa.png"> -->
-              <input class="btn btn-success btn-lg" name="submit" value="Pay with e-Sewa" type="submit" >
-              <div class="single-method">
-                                               
-                                               </div>
-            </form>    
+
+                                    <a href="http://localhost/project/ecommerce/esewa_checkout.php">
+                                    <button>Pay with esewa</button>
+                                    </a>
+                                         
             </div>
                                          </div>  
                                 </div> 

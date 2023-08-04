@@ -5,7 +5,7 @@ if( isset($_REQUEST['oid']) &&
 	isset( $_REQUEST['refId'])
 	)
 {
-	$sql = "SELECT * FROM order WHERE invoice_no = '".$_REQUEST['oid']."'"	;
+	$sql = "SELECT * FROM order WHERE id = '".$_REQUEST['oid']."'"	;
 	$result = mysqli_query( $con, $sql);
 	if(  $result )
 	{
@@ -20,7 +20,7 @@ if( isset($_REQUEST['oid']) &&
 			'amt'=> $order['total_price'],
 			'rid'=>  $_REQUEST['refId'],
 			'pid'=>  $order['invoice_no'],
-			'scd'=> 'epay_payment'
+			'scd'=> 'NP-ES-COLLEGE-TEST'
 			];
 
 			$curl = curl_init($url);

@@ -68,7 +68,7 @@ require('top.php');
                     <div class="row">
                         <div class="product__list clearfix mt--30">
                             <?php
-                            $get_product=get_product($con,12);
+                            $get_product=get_product($con,18);
                             foreach($get_product as $list){
                             ?>
                             <div class="col-md-4 col-lg-3 col-sm-4 col-xs-12">

@@ -54,7 +54,7 @@ if($str!=''){
 											<div class="category">
 												<div class="ht__cat__thumb">
 													<a href="product.php?id=<?php echo $list['id']?>">
-                                                    <img src="media/product/<?php echo $get_product['0']['image']?>" alt="full-image"/>
+                                                    <img src="media/product/<?php echo $list['image']?>" alt="full-image"/>
 													</a>
 												</div>
 												
