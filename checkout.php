@@ -20,7 +20,7 @@ if(isset($_POST['submit'])){
     $city=get_safe_value($con,$_POST['city']);
     $pincode=get_safe_value($con,$_POST['pincode']);
     $payment_type=get_safe_value($con,$_POST['payment_type']);
-    echo $payment_type;
+    //echo $payment_type;
  
     $user_id=$_SESSION['USER_ID'];
 

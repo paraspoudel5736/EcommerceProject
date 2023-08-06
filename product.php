@@ -236,7 +236,7 @@ if(isset($_GET['id'])){
         } else {
             echo "No videos found matching your preferred tag.";
         }
-        $con->close();
+        // $con->close();
 
         // Function to calculate similarity score (you can implement your own similarity metric)
         function calculateSimilarity($productTitle, $productDesc, $preferredTag) {

@@ -1,12 +1,14 @@
 <?php
-include 'connection.inc.php';
+$con=mysqli_connect("localhost","root","","ecommerce")or die("Could not connect to database");
 if( isset($_REQUEST['oid']) &&
 	isset( $_REQUEST['amt']) &&
 	isset( $_REQUEST['refId'])
 	)
 {
-	 $sql = "select * from  order WHERE id = '".$_REQUEST['oid']."'";
-	$result = mysqli_query( $con, "select * from  order WHERE id = '".$_REQUEST['oid']."'");
+	$sql = "SELECT * FROM `order` WHERE id = '".$_REQUEST['oid']."'"	;
+	$result = mysqli_query( $con, $sql);
+
+
 	if(  $result )
 	{
 
@@ -19,8 +21,8 @@ if( isset($_REQUEST['oid']) &&
 			$data =[
 			'amt'=> $order['total_price'],
 			'rid'=>  $_REQUEST['refId'],
-			'pid'=>  $order['invoice_no'],
-			'scd'=> 'NP-ES-COLLEGE-TEST'
+			'pid'=>  $order['id'],
+			'scd'=> 'epay_payment'
 			];
 
 			$curl = curl_init($url);
@@ -30,12 +32,13 @@ if( isset($_REQUEST['oid']) &&
 			$response = curl_exec($curl);
 			$response_code = get_xml_node_value('response_code',$response  );
 
-			if ( trim($response_code)  == 'Success')
+			 if (trim($response_code)  == "insert into `order`(user_id,product_id,total_price,txnid)VALUES ('$user_id', '$amt', '$pid', '$rid')")
+		
 			{
-				$sql = "UPDATE order SET payment_status = 5 WHERE id='".$order['id']."'";
-				mysqli_query($con, $sql);
-				//echo 'Thank you for purchasing with us. Your payment has been successfully.';
-				header('Location: success.php');
+				// $sql = "UPDATE `order` SET payment_status = pending WHERE id='".$order['id']."'";
+				// mysqli_query($con, $sql);
+				echo 'Thank you for purchasing with us. Your payment has been successfully.';
+				//header('Location: success.php');
 			}
 	
 	
