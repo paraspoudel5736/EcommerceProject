@@ -230,7 +230,7 @@ foreach($_SESSION['cart'] as $key=>$val){
                                             </div>
                                              <br>
                                              <div class="buttons-cart checkout--btn">
-                                            <input type="submit" name="submit" value="submit"style="background:hsl(19deg 90% 49%);,color:#f5f5f5;"/>
+                                            <input type="submit" name="submit" style="background:hsl(19deg 90% 49%);,color:#f5f5f5;"/>
                                                <br>
                                     </div>
 

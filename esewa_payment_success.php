@@ -5,8 +5,8 @@ if( isset($_REQUEST['oid']) &&
 	isset( $_REQUEST['refId'])
 	)
 {
-	$sql = "SELECT * FROM order WHERE id = '".$_REQUEST['oid']."'"	;
-	$result = mysqli_query( $con, $sql);
+	 $sql = "select * from  order WHERE id = '".$_REQUEST['oid']."'";
+	$result = mysqli_query( $con, "select * from  order WHERE id = '".$_REQUEST['oid']."'");
 	if(  $result )
 	{
 
@@ -32,7 +32,7 @@ if( isset($_REQUEST['oid']) &&
 
 			if ( trim($response_code)  == 'Success')
 			{
-				$sql = "UPDATE order SET payment_status=5 WHERE id='".$order['id']."'";
+				$sql = "UPDATE order SET payment_status = 5 WHERE id='".$order['id']."'";
 				mysqli_query($con, $sql);
 				//echo 'Thank you for purchasing with us. Your payment has been successfully.';
 				header('Location: success.php');

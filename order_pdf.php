@@ -1,5 +1,5 @@
 <?php
-include('vendor/autoload.php');
+require('vendor/vendor/autoload.php');
 require('connection.inc.php');
 require('function.inc.php');
 
@@ -59,6 +59,7 @@ $html='<div class="wishlist-table table-responsive">
       $html.='</tbody>
    </table>
 </div>';
+
 $mpdf=new \Mpdf\Mpdf();
 $mpdf->WriteHTML($css,1);
 $mpdf->WriteHTML($html,2);

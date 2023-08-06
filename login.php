@@ -1,5 +1,6 @@
 <?php 
 
+
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
@@ -70,21 +71,36 @@ if (isset($_POST["register"]))
 		// connect with database
 		$conn = mysqli_connect("localhost", "root", "", "ecommerce");
 
-		// insert in users table
-		$sql = "INSERT INTO users(name, mobile, email, password, verification_code, email_verified_at) VALUES ('" . $name . "','" . $mobile . "', '" . $email . "', '" . $password . "', '" . $verification_code . "', NULL)";
-		mysqli_query($conn, $sql);
-		header("Location: email-verification.php?email=" . $email);
-		exit();
+		$check_user=mysqli_num_rows(mysqli_query($conn,"select * from users where
+ 		email='$email'"));
+ 		if($check_user>0){
+			// echo “<span class="field_error" id="email_error"></span>”;
+			echo '<span class="field_error"  id="email_error"> The email you provided is already present : </span>';
+    	 echo "$email";
+		 
+ 		}else{
+			$added_on=date('Y-m-d h:i:S');
+			$sql = "INSERT INTO users(name, mobile, email, password, added_on, verification_code, email_verified_at) VALUES ('" . $name . "','" . $mobile . "', '" . $email . "', '" . $password . "', '" . $added_on . "', '" . $verification_code . "', NULL)";
+			mysqli_query($conn, $sql);
+			header("Location: email-verification.php?email=" . $email);
+			exit();
+		}
+	
 	} catch (Exception $e) {
-		echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-	}
-}
+			echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+		}
+		}
+		// insert in users table
 
-require('top.php');
-if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']=='yes'){
-	//header('location:checkout.php');
-	die();
-}
+		require('top.php');
+	
+
+
+
+// if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']=='yes'){
+// 	//header('location:checkout.php');
+// 	die();
+// }
 ?>
 <!-- Start Bradcaump area -->
         <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">

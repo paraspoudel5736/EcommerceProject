@@ -173,7 +173,7 @@ if(isset($_POST['submit'])) {
                             </div>
 
                             <div class="form-group">
-                               <label for="categories" class=" form-control-label">Meta Title</label>
+                               <label for="categories" class=" form-control-label">Meta Tag</label>
                                <textarea name="meta_tag" placeholder="Enter product meta tag"
                                 class="form-control"><?php echo $meta_tag?>
                               </textarea>
