@@ -138,8 +138,8 @@ foreach($_SESSION['cart'] as $key=>$val){
 										<input value="0" name="pdc" type="hidden">
 										<input value="epay_payment" name="scd" type="hidden">
 										<input value="<?php echo $pid;?>" name="pid" type="hidden">
-										<input value="http://localhost/project/ecommerce/esewa_payment_success.php" type="hidden" name="su">
-										<input value="http://localhost/project/ecommerce/esewa_payment_failed.php" type="hidden" name="fu">
+										<input value="http://localhost/project/ecommerce/esewa_payment_success.php?q=su" type="hidden" name="su">
+										<input value="http://localhost/project/ecommerce/esewa_payment_failed.php?q=fu" type="hidden" name="fu">
 										<br>
                                         <input type="radio" name="payment_type" value="Esewa"required/> Cash On Delivery
                                             </div>

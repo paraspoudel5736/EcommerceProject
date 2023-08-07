@@ -8,7 +8,6 @@ if( isset($_REQUEST['oid']) &&
 	$sql = "SELECT * FROM `order` WHERE id = '".$_REQUEST['oid']."'"	;
 	$result = mysqli_query( $con, $sql);
 
-
 	if(  $result )
 	{
 
@@ -22,23 +21,25 @@ if( isset($_REQUEST['oid']) &&
 			'amt'=> $order['total_price'],
 			'rid'=>  $_REQUEST['refId'],
 			'pid'=>  $order['id'],
-			'scd'=> 'epay_payment'
+			'scd'=> 'NP-ES-COLLEGE-TEST'
+			
 			];
 
+			// header('Location: success.php');
 			$curl = curl_init($url);
 			curl_setopt($curl, CURLOPT_POST, true);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			$response = curl_exec($curl);
 			$response_code = get_xml_node_value('response_code',$response  );
-
-			 if (trim($response_code)  == "insert into `order`(user_id,product_id,total_price,txnid)VALUES ('$user_id', '$amt', '$pid', '$rid')")
+			header('Location: success.php');
+			 if (trim($response_code)  == 'success')
 		
 			{
-				// $sql = "UPDATE `order` SET payment_status = pending WHERE id='".$order['id']."'";
-				// mysqli_query($con, $sql);
-				echo 'Thank you for purchasing with us. Your payment has been successfully.';
-				//header('Location: success.php');
+				//   $sql = "UPDATE `order` SET payment_status = 5 WHERE id='".$order['id']."'";
+				//  mysqli_query($con, $sql);
+				// echo 'Thank you for purchasing with us. Your payment has been successfully.';
+				//header('Location: http://localhost/project/ecommerce/success.php');
 			}
 	
 	
@@ -60,4 +61,8 @@ function get_xml_node_value($node, $xml) {
     }	  
 
    return false;
+
 }
+
+ ?>
+ <?php header('Location: http://localhost/project/ecommerce/success.php');?>

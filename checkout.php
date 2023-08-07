@@ -1,94 +1,139 @@
-<?php
+<?php 
 require('top.php');
-date_default_timezone_set('Asia/Kathmandu');
-//check if there is item in cart or not if cart is 0 then redirect to index page.
 if(!isset($_SESSION['cart']) || count($_SESSION['cart'])==0){
-    ?>
-    <script>
-        window.location.href='index.php';
-    </script>
-    <?php
+	?>
+	<script>
+		window.location.href='index.php';
+	</script>
+	<?php
 }
-//for cart total
+
 $cart_total=0;
 
-
-
-//form method post submit in database
 if(isset($_POST['submit'])){
-    $address=get_safe_value($con,$_POST['address']);
-    $city=get_safe_value($con,$_POST['city']);
-    $pincode=get_safe_value($con,$_POST['pincode']);
-    $payment_type=get_safe_value($con,$_POST['payment_type']);
-    //echo $payment_type;
- 
-    $user_id=$_SESSION['USER_ID'];
-
-    foreach($_SESSION['cart'] as $key=>$val){
-        $productArr=get_product($con,'','',$key);  
-        $id= $productArr[0]['id'];
-        $price=$productArr[0]['price'];
-        $mrp=$productArr[0]['mrp'];
-        $qty=$val['qty'];
-        $cart_total=$cart_total+($price*$qty);
-        }
-    $total_price=($cart_total);
-    $payment_status='pending';
-    if($payment_type=='cod'){
-        $payment_status='success';
-    }
-    $order_status='1';
-    $added_on=date('Y-m-d h:i:s');
-
-    mysqli_query($con,"insert into
-     `order`(user_id,address,city,pincode,payment_type,payment_status,order_status,added_on,total_price)  VALUES('$user_id',
-    '$address','$city','$pincode','$payment_type','$payment_status','$order_status','$added_on','$total_price')");
-
-
-$order_id=mysqli_insert_id($con);
-foreach($_SESSION['cart'] as $key=>$val){
-    $productArr=get_product($con,'','',$key); 
-     
-    $price=$productArr[0]['price'];
-    $qty=$val['qty'];
-
-    mysqli_query($con,"insert into
-    order_detail(order_id,product_id,qty,price)  VALUES('$order_id',
-   '$key','$qty','$price')");
-  }
-  
-  unset($_SESSION['cart']);
-  if($payment_type=='esewa'){
-    $hash_string = '';
+	$address=get_safe_value($con,$_POST['address']);
+	$city=get_safe_value($con,$_POST['city']);
+	$pincode=get_safe_value($con,$_POST['pincode']);
+	$payment_type=get_safe_value($con,$_POST['payment_type']);
+	$user_id=$_SESSION['USER_ID'];
+	foreach($_SESSION['cart'] as $key=>$val){
+		$productArr=get_product($con,'','',$key);
+		$price=$productArr[0]['price'];
+		$qty=$val['qty'];
+		$cart_total=$cart_total+($price*$qty);
 		
-		$URL = "https://uat.esewa.com.np/epay/main";
+	}
+	$total_price=$cart_total;
+	$payment_status='pending';
+	if($payment_type=='cod'){
+		$payment_status='success';
+	}
+	$order_status='1';
+	$added_on=date('Y-m-d h:i:s');
+	
+	$ref_id = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+		
+	
+	mysqli_query($con,"insert into `order`(user_id,address,city,pincode,payment_type,payment_status,order_status,added_on,total_price,ref_id) values('$user_id','$address','$city','$pincode','$payment_type','$payment_status','$order_status','$added_on','$total_price','ref_id')");
+	
+	$order_id=mysqli_insert_id($con);
+	
+	foreach($_SESSION['cart'] as $key=>$val){
+		$productArr=get_product($con,'','',$key);
+		$price=$productArr[0]['price'];
+		$qty=$val['qty'];
+		
+		mysqli_query($con,"insert into `order_detail`(order_id,product_id,qty,price) values('$order_id','$key','$qty','$price')");
+	}
+	
+	unset($_SESSION['cart']);
+	
+	if($payment_type=='esewa'){
+		$MERCHANT_KEY = "epay_payment"; 
+        $payment_status='sucess';
+		$SALT = "";
+		$hash_string = '';
+		//$PAYU_BASE_URL = "https://secure.payu.in";
+		$PAYU_BASE_URL = "https://uat.esewa.com.np/epay";
 		$action = '';
 		$posted = array();
 		if(!empty($_POST)) {
 		  foreach($_POST as $key => $value) {    
 			$posted[$key] = $value; 
-            $order_status = "0";        
-            
-  }}
-}
-  
-?>
-<script>
-     window.location.href='thank_you.php';
- </script>
- <?php
+		  }
+		}
+		
+		$userArr=mysqli_fetch_assoc(mysqli_query($con,"select * from users where id='$user_id'"));
+		
+		$formError = 0;
+		$posted['pid']=$ref_id;
+		$posted['tAmt']=$total_price;
+		
+		$posted['key']=$MERCHANT_KEY ;
+		$hash = '';
+		$hashSequence = "key|ref_id|tAmt|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+		if(empty($posted['hash']) && sizeof($posted) > 0) {
+		  if(
+				  empty($posted['key'])
+				  || empty($posted['pid'])
+				  || empty($posted['tAmt'])
+				  
+				 
+		  ) {
+			$formError = 1;
+		  } else {    
+			$hashVarsSeq = explode('|', $hashSequence);
+			foreach($hashVarsSeq as $hash_var) {
+			  $hash_string .= isset($posted[$hash_var]) ? $posted[$hash_var] : '';
+			  $hash_string .= '|';
+			}
+			$hash_string .= $SALT;
+			$hash = strtolower(hash('sha512', $hash_string));
+			$action = $PAYU_BASE_URL . '/main';
+		  }
+		} elseif(!empty($posted['hash'])) {
+		  $hash = $posted['hash'];
+		  $action = $PAYU_BASE_URL . '/main';
+		}
 
+
+		$formHtml ='<form method="post" name="payuForm" id="payuForm" action="'.$action.'">
+		<input type="hidden" name="key" value="'.$MERCHANT_KEY.'" />
+		<input type="hidden" name="hash" value="'.$hash.'"/>
+		<input type="hidden" name="pid" value="'.$posted['pid'].'" />
+		<input name="tAmt" type="hidden" value="'.$posted['tAmt'].'" />
+        <input name="amt" type="hidden" value="'.$posted['tAmt'].'" />
+		<input value="0" name="txAmt" type="hidden">
+		<input value="0" name="psc" type="hidden">
+		<input value="0" name="pdc" type="hidden">
+		<input value="epay_payment" name="scd" type="hidden">
+		<input value="http://localhost/project/ecommerce/esewa_payment_success.php?q=su" type="hidden" name="su">
+		<input value="http://localhost/project/ecommerce/esewa_payment_failed.php?q=fu" type="hidden" name="fu">
+										
+		
+		<input type="submit" style="display:none;"/></form>';
+		echo $formHtml;
+		echo '<script>document.getElementById("payuForm").submit();</script>';
+	}else{	
+
+		?>
+		<script>
+			window.location.href='thank_you.php';
+		</script>
+		<?php
+	}	
+	
 }
 ?>
-        <!-- Start Bradcaump area -->
-        <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
+
+<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
             <div class="ht__bradcaump__wrap">
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="bradcaump__inner">
                                 <nav class="bradcaump-inner">
-                                  <a class="breadcrumb-item" href="index.html">Home</a>
+                                  <a class="breadcrumb-item" href="index.php">Home</a>
                                   <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
                                   <span class="breadcrumb-item active">checkout</span>
                                 </nav>
@@ -108,170 +153,117 @@ foreach($_SESSION['cart'] as $key=>$val){
                             <div class="accordion-list">
                                 <div class="accordion">
                                     
-                                    <?php 
-                                    $accordion_class='accordion__title';
-                                    if(!isset($_SESSION['USER_LOGIN'])){
-                                    $accordion_class='accordion__hide';
-                                        ?>
-                                        <div class="accordion__title">
+									<?php 
+									$accordion_class='accordion__title';
+									if(!isset($_SESSION['USER_LOGIN'])){
+									$accordion_class='accordion__hide';
+									?>
+									<div class="accordion__title">
                                         Checkout Method
                                     </div>
-                                    <!-- <div class="accordion__body">
+                                    <div class="accordion__body">
                                         <div class="accordion__body__form">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div class="checkout-method__login">
-                                                    <form id="login-form"  method="post">
+                                                    <!-- <div class="checkout-method__login">
+                                                        <form id="login-form" method="post">
                                                             <h5 class="checkout-method__title">Login</h5>
                                                             <div class="single-input">
-                                                                <label for="user-email">Email Address</label>
                                                                 <input type="text" name="login_email" id="login_email" placeholder="Your Email*" style="width:100%">
-                                                                <span class="field_error" id="login_email_error"></span>  
+																<span class="field_error" id="login_email_error"></span>
                                                             </div>
-                                                            
+															
                                                             <div class="single-input">
-                                                                <label for="user-pass">Password</label>
-                                                                <input type="text" name="login_password" id="login_password" placeholder="Your Password*" style="width:100%">
-                                                                <span class="field_error" id="login_password_error"></span>
+                                                                <input type="password" name="login_password" id="login_password" placeholder="Your Password*" style="width:100%">
+																<span class="field_error" id="login_password_error"></span>
                                                             </div>
-                                                            
+															
                                                             <p class="require">* Required fields</p>
                                                             <div class="dark-btn">
-                                                            <button type="button" class="fv-btn" onclick="user_login()">Login</button>
-                                                            <div class="form-output login_msg">
-									                          <p class="form-messege field_error"></p>
-								                            </div>
-                                                        </div>
-                                                            
-                                                        </form>
+                                                                <button type="button" class="fv-btn" onclick="user_login()">Login</button>
+                                                            </div>
+															<div class="form-output login_msg">
+																<p class="form-messege field_error"></p>
+															</div>
+                                                        </form> -->
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="checkout-method__login">
-                                                    <form id="register-form" method="post">
+                                                        <form action="#">
                                                             <h5 class="checkout-method__title">Register</h5>
                                                             <div class="single-input">
-                                                                
                                                                 <input type="text" name="name" id="name" placeholder="Your Name*" style="width:100%">
-                                                                <span class="field_error" id="name_error"></span>
+																<span class="field_error" id="name_error"></span>
                                                             </div>
 															<div class="single-input">
-                                                                
                                                                 <input type="text" name="email" id="email" placeholder="Your Email*" style="width:100%">
-                                                                <span class="field_error" id="email_error"></span>
-                                                            </div>
-
-                                                            <div class="single-input">
-                                                            <input type="text" name="mobile" id="mobile"placeholder="Your Mobile*" style="width:100%">
-                                                            <span class="field_error" id="mobile_error"></span>
+																<span class="field_error" id="email_error"></span>
                                                             </div>
 															
                                                             <div class="single-input">
-                                                            <input type="text" name="password" id="password" placeholder="Your Password*" style="width:100%">   
-                                                            <span class="field_error" id="password_error"></span>  
+                                                                <input type="text" name="mobile" id="mobile" placeholder="Your Mobile*" style="width:100%">
+																<span class="field_error" id="mobile_error"></span>
+                                                            </div>
+															<div class="single-input">
+                                                                <input type="password" name="password" id="password" placeholder="Your Password*" style="width:100%">
+																<span class="field_error" id="password_error"></span>
                                                             </div>
                                                             <div class="dark-btn">
-                                                            <button type="button" class="fv-btn" onclick="user_register() ">Register</button>
-                                                            <div class="form-output register_msg">
-                                                              <p class="form-messege field_error"></p>
-								                            </div>
+                                                                <button type="button" class="fv-btn" onclick="user_register()">Register</button>
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> -->
-                                    <?php } ?>
+                                    </div>
+									<?php } ?>
                                     <div class="<?php echo $accordion_class?>">
                                         Address Information
                                     </div>
-                                    <div class="accordion__body">
-                                        <div class="bilinfo">
-                                            <form method="post">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="single-input">
-                                                            <input type="text" name="address" placeholder="Street Address"required>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="col-md-6">
-                                                        <div class="single-input">
-                                                            <input type="text" name="city" placeholder="City/State"required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="single-input">
-                                                            <input type="text" name="pincode" placeholder="Post code/ zip"required>
-                                                        </div>
-                                                    </div>
-                                                   
-                                                    
-                                                </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="<?php echo $accordion_class?>">
-                                        payment information
-                                    </div>
-                                    <div class="accordion__body">
-                                        <div class="paymentinfo">
-                                            <h3>Delivery Charge- Rs.100<h3> <br>
-                                            <div class="single-method">
-
-                                             <input type="radio" name="payment_type" value="COD"required/> Cash On Delivery
-
-                                             <br>
-                                            <!-- <input type="radio" name="payment_type" value="ESEWA"required/> ESEWA -->
-                                            </div>
-                                             <br>
-                                             <div class="buttons-cart checkout--btn">
-                                            <input type="submit" name="submit" style="background:hsl(19deg 90% 49%);,color:#f5f5f5;"/>
-                                               <br>
-                                    </div>
-
-                 
-                                               
-                                               
-                                            
-             
-                                            <div class="single-method">
-                                               
-                                            </div>
-                                        </div>
-                                    
-                                     
-                                         </form>
-                                         <?php
-							$cart_total=0;
-							foreach($_SESSION['cart'] as $key=>$val){
-							$productArr=get_product($con,'','',$key);
-                            $pid=$productArr[0]['id'];
-							$pname=$productArr[0]['name'];
-                           
-							$mrp=$productArr[0]['mrp'];
-							$price=$productArr[0]['price'];
-							$image=$productArr[0]['image'];
-							$qty=$val['qty'];
-                            $delivery=100;
-                            $cart_total=$cart_total+($price*$qty);
-                            $overall_charge=$cart_total+$delivery;
-
-							?> 
-                                    <div class="accordion__body ">
-
-                                    <a href="http://localhost/project/ecommerce/esewa_checkout.php">
-                                    <button>Pay with esewa</button>
-                                    </a>
-                                         
-            </div>
-                                         </div>  
-                                </div> 
-                                
+									<form method="post">
+										<div class="accordion__body">
+											<div class="bilinfo">
+												
+													<div class="row">
+														<div class="col-md-12">
+															<div class="single-input">
+																<input type="text" name="address" placeholder="Street Address" required>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="single-input">
+																<input type="text" name="city" placeholder="City/State" required>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="single-input">
+																<input type="text" name="pincode" placeholder="Post code/ zip" required>
+															</div>
+														</div>
+														
+													</div>
+												
+											</div>
+										</div>
+										<div class="<?php echo $accordion_class?>">
+											payment information
+										</div>
+										<div class="accordion__body">
+											<div class="paymentinfo">
+												<div class="single-method">
+													COD <input type="radio" name="payment_type" value="COD" required/>
+													&nbsp;&nbsp;Esewa <input type="radio" name="payment_type" value="esewa" required/>
+												</div>
+												<div class="single-method">
+												  
+												</div>
+											</div>
+										</div>
+										 <input type="submit" name="submit"/>
+									</form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -279,45 +271,40 @@ foreach($_SESSION['cart'] as $key=>$val){
                         <div class="order-details">
                             <h5 class="order-details__title">Your Order</h5>
                             <div class="order-details__item">
-                                     
-                            
-                                <div class="single-item">
+                                <?php
+								$cart_total=0;
+								foreach($_SESSION['cart'] as $key=>$val){
+								$productArr=get_product($con,'','',$key);
+								$pname=$productArr[0]['name'];
+								$mrp=$productArr[0]['mrp'];
+								$price=$productArr[0]['price'];
+								$image=$productArr[0]['image'];
+								$qty=$val['qty'];
+                                
+								$cart_total=$cart_total+($price*$qty);
+								?>
+								<div class="single-item">
                                     <div class="single-item__thumb">
-                                        <img src="media/product/<?php echo $image?>"/>
+                                    <img src="media/product/<?php echo $image?>"/>
                                     </div>
                                     <div class="single-item__content">
                                         <a href="#"><?php echo $pname?></a>
-                                        <span class="price">Rs. <?php echo $price*$qty?></span>
+                                        <span class="price"><?php echo $price*$qty?></span>
                                     </div>
                                     <div class="single-item__remove">
-                                    <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key?>','remove')"><i class="icon-trash icons"></i></a>
+                                        <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key?>','remove')"><i class="icon-trash icons"></i></a>
                                     </div>
                                 </div>
-                                <?php } ?>
-                            </div>
-                            
-                            <div class="ordre-details__total">
-                                <h5>Order Total</h5>
-                                <span class="price">Rs.<?php echo  $cart_total ?></span>
-                            
+								<?php } ?>
                             </div>
                             <div class="ordre-details__total">
-                                <h5>Delivery Price</h5>
-                                <span class="price">Rs.<?php echo  $delivery ?></span>
-                            
-                            </div>
-                            <div class="ordre-details__total">
-                                <h5>Total Price</h5>
-                                <span class="price">Rs.<?php echo $overall_charge ?></span>
-                            
+                                <h5>Order total</h5>
+                                <span class="price"><?php echo $cart_total?></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- cart-main-area end -->
-
-        <?php
-        require('footer.php');
-        ?>
+        						
+<?php require('footer.php')?>        
