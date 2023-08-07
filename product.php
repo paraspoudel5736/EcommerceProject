@@ -174,15 +174,15 @@ if(isset($_GET['id'])){
         <?php
         $preferredTag = $metaTagVar;
 
-        // Fetch videos that match the user's preferred tag
+        // Fetch Products that match the user's preferred tag
         $sql = "SELECT * FROM product WHERE  meta_tag = '$preferredTag'";
         $result = $con->query($sql);
-        // Array to store recommended videos
-        $recommendedVideos = array();
+        // Array to store recommended Products
+        $recommendedProducts = array();
 
-        // Check if there are any videos that match the preferred tag
+        // Check if there are any Products that match the preferred tag
         if ($result->num_rows > 0) {
-            // Loop through each video and calculate similarity scores
+            // Loop through each Products and calculate similarity scores
             while ($row = $result->fetch_assoc()) {
                 $productId = $row["id"];
                 $productTitle = $row["name"];
@@ -191,11 +191,11 @@ if(isset($_GET['id'])){
                 $productImg = $row["image"];
                 $prodPrice = $row["price"];
 
-                // Calculate similarity score based on video attributes (you can define your own similarity metric)
+                // Calculate similarity score based on Products attributes (you can define your own similarity metric)
                 $similarityScore = calculateSimilarity($productTitle, $productDesc, $preferredTag);
 
-                // Store video details along with similarity score in the recommendedVideos array
-                $recommendedVideos[] = array(
+                // Store Products details along with similarity score in the recommendedProducts array
+                $recommendedProducts[] = array(
                     "productId" => $productId,
                     "prodTitle" => $productTitle,
                     "prodDesc" => $productDesc,
@@ -206,13 +206,13 @@ if(isset($_GET['id'])){
                 );
             }
 
-            // Sort recommended videos based on similarity score in descending order
-            usort($recommendedVideos, function ($a, $b) {
+            // Sort recommended Products based on similarity score in descending order
+            usort($recommendedProducts, function ($a, $b) {
                 return $b["similarityScore"] <=> $a["similarityScore"];
             });
 
-            // Display the recommended videos
-            foreach ($recommendedVideos as $prod) {
+            // Display the recommended Products
+            foreach ($recommendedProducts as $prod) {
                 ?>
                 <div class="col-md-4 col-lg-3 col-sm-4 col-xs-12">
                         <div class="category">
@@ -240,7 +240,7 @@ if(isset($_GET['id'])){
 
         // Function to calculate similarity score (you can implement your own similarity metric)
         function calculateSimilarity($productTitle, $productDesc, $preferredTag) {
-            // Implement your own similarity calculation based on video attributes and the user's preferred tag
+            // Implement your own similarity calculation based on Products attributes and the user's preferred tag
             // For example, you can use cosine similarity, Jaccard similarity, etc.
             // For simplicity, we'll just return a random similarity score in this example.
             return rand(1, 10);
