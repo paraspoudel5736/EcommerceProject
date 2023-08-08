@@ -1,3 +1,7 @@
+<?php
+include 'top.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +15,8 @@
 
 			<h3>Thank you for purchasing with us. Your payment has been successfull</h3>
 		</div>
-
+		<div class="cr__btn" align="center">
+		 <a href="my_order.php">My Order </a>
+        </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-require('ve/vendor/autoload.php');
+require('vendor/autoload.php');
 require('connection.inc.php');
 require('function.inc.php');
 

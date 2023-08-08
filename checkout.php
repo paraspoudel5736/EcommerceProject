@@ -34,7 +34,7 @@ if(isset($_POST['submit'])){
 	$ref_id = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
 		
 	
-	mysqli_query($con,"insert into `order`(user_id,address,city,pincode,payment_type,payment_status,order_status,added_on,total_price,ref_id) values('$user_id','$address','$city','$pincode','$payment_type','$payment_status','$order_status','$added_on','$total_price','ref_id')");
+	mysqli_query($con,"insert into `order`(user_id,address,city,pincode,payment_type,payment_status,order_status,added_on,total_price,ref_id) values('$user_id','$address','$city','$pincode','$payment_type','$payment_status','$order_status','$added_on','$total_price','$ref_id')");
 	
 	$order_id=mysqli_insert_id($con);
 	
@@ -53,7 +53,7 @@ if(isset($_POST['submit'])){
         $payment_status='sucess';
 		$SALT = "";
 		$hash_string = '';
-		//$PAYU_BASE_URL = "https://secure.payu.in";
+
 		$PAYU_BASE_URL = "https://uat.esewa.com.np/epay";
 		$action = '';
 		$posted = array();
