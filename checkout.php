@@ -24,7 +24,7 @@ if(isset($_POST['submit'])){
 		
 	}
 	$total_price=$cart_total;
-	$payment_status='pending';
+	// $payment_status='pending';
 	if($payment_type=='cod'){
 		$payment_status='success';
 	}
