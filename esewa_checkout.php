@@ -28,12 +28,13 @@ if(isset($_POST['submit'])){
         $cart_total=$cart_total+($price*$qty);
         }
     $total_price=($cart_total);
-    $payment_status='pending';
+    $payment_status='success';
     if($payment_type=='Esewa'){
         $payment_status='success';
     }
     $order_status='1';
     $added_on=date('Y-m-d h:i:s');
+    $ref_id = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
 
     mysqli_query($con,"insert into
      `order`(user_id,payment_type,payment_status,order_status,added_on,total_price)  VALUES('$user_id',

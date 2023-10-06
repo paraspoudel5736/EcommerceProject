@@ -234,15 +234,13 @@ if(isset($_GET['id'])){
                 <?php
             }
         } else {
-            echo "No videos found matching your preferred tag.";
+            echo "No Product found matching your preferred tag.";
         }
         // $con->close();
 
         // Function to calculate similarity score (you can implement your own similarity metric)
         function calculateSimilarity($productTitle, $productDesc, $preferredTag) {
-            // Implement your own similarity calculation based on Products attributes and the user's preferred tag
-            // For example, you can use cosine similarity, Jaccard similarity, etc.
-            // For simplicity, we'll just return a random similarity score in this example.
+           
             return rand(1, 10);
         }
         ?>
