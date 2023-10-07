@@ -29,7 +29,8 @@ if(isset($_POST['submit'])){
         }
     $total_price=($cart_total);
     $payment_status='success';
-    if($payment_type=='Esewa'){
+    echo$payment_type; //undefine ?
+    if($payment_type==' Esewa'){
         $payment_status='success';
     }
     $order_status='1';
@@ -139,6 +140,7 @@ foreach($_SESSION['cart'] as $key=>$val){
 										<input value="0" name="pdc" type="hidden">
 										<input value="epay_payment" name="scd" type="hidden">
 										<input value="<?php echo $pid;?>" name="pid" type="hidden">
+										<input value="esewa" name="payment_type" type="hidden">
 										<input value="http://localhost/project/ecommerce/esewa_payment_success.php?q=su" type="hidden" name="su">
 										<input value="http://localhost/project/ecommerce/esewa_payment_failed.php?q=fu" type="hidden" name="fu">
 										<br>

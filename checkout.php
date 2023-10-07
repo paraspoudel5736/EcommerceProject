@@ -15,6 +15,7 @@ if(isset($_POST['submit'])){
 	$city=get_safe_value($con,$_POST['city']);
 	$pincode=get_safe_value($con,$_POST['pincode']);
 	$payment_type=get_safe_value($con,$_POST['payment_type']);
+	echo$payment_type;
 	$user_id=$_SESSION['USER_ID'];
 	foreach($_SESSION['cart'] as $key=>$val){
 		$productArr=get_product($con,'','',$key);
@@ -24,8 +25,9 @@ if(isset($_POST['submit'])){
 		
 	}
 	$total_price=$cart_total;
+	
 	// $payment_status='pending';
-	if($payment_type=='cod'){
+	if($payment_type=='esewa'){
 		$payment_status='success';
 	}
 	$order_status='1';
