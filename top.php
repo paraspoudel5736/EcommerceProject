@@ -16,7 +16,7 @@ $totalProduct=$obj->totalProduct();
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Ecom Website</title>
+    <title>GadgetNepal</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -30,9 +30,6 @@ $totalProduct=$obj->totalProduct();
 	<script src="js/vendor/modernizr-3.5.0.min.js"></script>
 </head>
 <body>
-   
-
-    <!-- Body main wrapper start -->
     <div class="wrapper">
         <header id="htc__header" class="htc__header__area header--one">
             <div id="sticky-header-with-topbar" class="mainmenu__wrap sticky__header">

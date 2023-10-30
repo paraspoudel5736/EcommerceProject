@@ -9,8 +9,8 @@ if(!isset($_GET['id']) && $_GET['id']!=''){
 	<?php
 }
 
+//Product sorting 
 $cat_id=mysqli_real_escape_string($con,$_GET['id']);
-
 $price_high_selected="";
 $price_low_selected="";
 $new_selected="";
@@ -99,7 +99,6 @@ if($cat_id>0){
 													<img src="media/product/<?php echo $list['image']?>"/>
 													</a>
 												</div>
-												
 												<div class="fr__product__inner">
 													<h4><a href="product-details.html"><?php echo $list['name']?></a></h4>
 													<ul class="fr__pro__prize">

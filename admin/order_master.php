@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Kathmandu');
 session_start();
 require('top.inc.php');
 require('function.inc.php');

@@ -1,7 +1,5 @@
 <?php
 
- 
-
     if (isset($_POST["verify_email"]))
     {
         $email = $_POST["email"];

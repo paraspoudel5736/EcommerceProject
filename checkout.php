@@ -7,7 +7,6 @@ if(!isset($_SESSION['cart']) || count($_SESSION['cart'])==0){
 	</script>
 	<?php
 }
-
 $cart_total=0;
 
 if(isset($_POST['submit'])){
@@ -26,7 +25,6 @@ if(isset($_POST['submit'])){
 	}
 	$total_price=$cart_total;
 	
-	// $payment_status='pending';
 	if($payment_type=='esewa'){
 		$payment_status='success';
 	}

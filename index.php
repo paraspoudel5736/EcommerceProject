@@ -1,10 +1,7 @@
 <?php
 require('top.php');
-
 ?>
-
-<div class="body__overlay"></div>
-    
+<div class="body__overlay"></div> 
         <div class="slider__container slider--one bg__cat--3">
             <div class="slide__container slider__activation__wrap owl-carousel">
                 <div class="single__slide animation__style01 slider__fixed--height" style="background-color: antiquewhite;">
@@ -14,7 +11,7 @@ require('top.php');
                                 <div class="slide">
                                     <div class="slider__inner">
                                         <h2>collection 2023</h2>
-                                        <h1>IPHONE 13</h1>
+                                        <h1>IPHONE 15</h1>
                                         <div class="cr__btn">
                                             <a href="cart.php">Shop Now</a>
                                         </div>
@@ -68,7 +65,7 @@ require('top.php');
                     <div class="row">
                         <div class="product__list clearfix mt--30">
                             <?php
-                            $get_product=get_product($con,20);
+                            $get_product=get_product($con,16);
                             foreach($get_product as $list){
                             ?>
                             <div class="col-md-4 col-lg-3 col-sm-4 col-xs-12">

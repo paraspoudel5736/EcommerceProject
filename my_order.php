@@ -1,4 +1,5 @@
 <?php 
+date_default_timezone_set('Asia/Kathmandu');
 require('top.php');
 if(!isset($_SESSION['USER_LOGIN'])){
 	?>

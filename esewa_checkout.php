@@ -11,9 +11,6 @@ if(!isset($_SESSION['cart']) || count($_SESSION['cart'])==0){
 }
 //for cart total
 $cart_total=0;
-
-
-
 //form method post submit in database
 if(isset($_POST['submit'])){
     $payment_type=get_safe_value($con,$_POST['payment_type']);
@@ -29,21 +26,19 @@ if(isset($_POST['submit'])){
         }
     $total_price=($cart_total);
     $payment_status='success';
-    echo$payment_type; //undefine ?
+    echo$payment_type; 
     if($payment_type==' Esewa'){
         $payment_status='success';
     }
     $order_status='1';
     $added_on=date('Y-m-d h:i:s');
     $ref_id = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
-
     mysqli_query($con,"insert into
      `order`(user_id,payment_type,payment_status,order_status,added_on,total_price)  VALUES('$user_id',
     '$payment_type','$payment_status','$order_status','$added_on','$total_price')");
 
-
-$order_id=mysqli_insert_id($con);
-foreach($_SESSION['cart'] as $key=>$val){
+    $order_id=mysqli_insert_id($con);
+    foreach($_SESSION['cart'] as $key=>$val){
     $productArr=get_product($con,'','',$key); 
      
     $price=$productArr[0]['price'];
@@ -53,11 +48,8 @@ foreach($_SESSION['cart'] as $key=>$val){
     order_detail(order_id,product_id,qty,price)  VALUES('$order_id',
    '$key','$qty','$price')");
   }
-  
  
-  
 ?>
-
  <?php
 
 }
@@ -89,17 +81,8 @@ foreach($_SESSION['cart'] as $key=>$val){
                         <div class="checkout__inner">
                             <div class="accordion-list">
                                 <div class="accordion">
-                                    
-                                 
-                                   
-                                    
-
-                 
-                                               
-                                               
-                                            
-             
-                                            <div class="single-method">
+                                         
+                                <div class="single-method">
                                                
                                             </div>
                                         

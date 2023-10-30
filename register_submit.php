@@ -93,10 +93,6 @@ if (isset($_POST["register"]))
 }
 
 
-
-
-     
- 
 //      $added_on=date('Y-m-d h:i:S');
 //      mysqli_query($con,"insert into users(name,email,mobile,password,added_on) 
 //      values('$name','$email','$mobile','$password','$added_on')");

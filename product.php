@@ -143,14 +143,13 @@ if(isset($_GET['id'])){
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="ht__pro__details__content">
-                            <!-- Start Single Content -->
+         
                             <div role="tabpanel" id="description" class="pro__single__content tab-pane fade in active">
                                 <div class="pro__tab__content__inner">
                                     <?php echo $get_product['0']['description']?>
                                 </div>
                             </div>
-                            <!-- End Single Content -->
-                            
+                                    
                         </div>
                     </div>
                 </div>
