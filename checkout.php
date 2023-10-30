@@ -1,4 +1,5 @@
 <?php 
+date_default_timezone_set('Asia/Kathmandu');
 require('top.php');
 if(!isset($_SESSION['cart']) || count($_SESSION['cart'])==0){
 	?>
@@ -24,7 +25,7 @@ if(isset($_POST['submit'])){
 		
 	}
 	$total_price=$cart_total;
-	
+	$payment_status='pending';
 	if($payment_type=='esewa'){
 		$payment_status='success';
 	}
@@ -165,7 +166,7 @@ if(isset($_POST['submit'])){
                                         <div class="accordion__body__form">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <!-- <div class="checkout-method__login">
+                                                    <div class="checkout-method__login">
                                                         <form id="login-form" method="post">
                                                             <h5 class="checkout-method__title">Login</h5>
                                                             <div class="single-input">
@@ -185,10 +186,10 @@ if(isset($_POST['submit'])){
 															<div class="form-output login_msg">
 																<p class="form-messege field_error"></p>
 															</div>
-                                                        </form> -->
+                                                        </form>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <!-- <div class="col-md-6">
                                                     <div class="checkout-method__login">
                                                         <form action="#">
                                                             <h5 class="checkout-method__title">Register</h5>
@@ -214,7 +215,7 @@ if(isset($_POST['submit'])){
                                                             </div>
                                                         </form>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </div>

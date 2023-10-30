@@ -9,13 +9,6 @@ if(!isset($_SESSION['USER_LOGIN'])){
 	<?php
 }
 
-// if(isset($_REQUEST['oid'])&&isset($_REQUEST['amt'])&&isset($_REQUEST['refId'])){
-//     mysqli_query($con,"insert into
-//      `order`(user_id,address,city,pincode,payment_type,payment_status,order_status,added_on,total_price)  VALUES('$user_id',
-//     '$address','$city','$pincode','$payment_type','$payment_status','$order_status','$added_on','$total_price')");
-
-
-// }
 ?>
 <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
             <div class="ht__bradcaump__wrap">
